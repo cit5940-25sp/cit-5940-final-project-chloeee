@@ -6,4 +6,6 @@ package othello.gamelogic;
  * No need to edit this class!
  */
 public class HumanPlayer extends Player {
+    public HumanPlayer() {
+    }
 }
