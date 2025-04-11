@@ -8,8 +8,6 @@ import java.util.Map;
  * Employs a specific computer strategy passed in through program arguments.
  */
 public class ComputerPlayer extends Player{
-    // Check with Nick -> create interface called Strategy through which 3 strategies implemented?
-    // Check with Nick -> add this field to store the strategy per instance of computer Player?
     private Strategy strategy;
 
     public ComputerPlayer(String strategyName) {
@@ -29,5 +27,9 @@ public class ComputerPlayer extends Player{
 
     // PART 2
     // TODO: implement a method that returns a BoardSpace that a strategy selects
-    // Check with Nick -> How to do?
+    // We already have the strategies implemented, so simply call it
+    public BoardSpace chooseMove(BoardSpace[][] board, Player player, Player opponent) {
+        return strategy.selectMove(board, player, opponent);
+    }
+
 }
