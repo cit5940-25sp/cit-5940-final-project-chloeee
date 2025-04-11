@@ -1,6 +1,7 @@
 package othello.gamelogic;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.Computer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,19 +18,17 @@ public class OthelloGameTest {
     public void setUp() {
         player1 = new HumanPlayer();
         player2 = new HumanPlayer();
-
         player1.setColor(BoardSpace.SpaceType.BLACK);
         player2.setColor(BoardSpace.SpaceType.WHITE);
         OthelloGame game = new OthelloGame(player1, player2);
         game.initBoard();
         board = game.getBoard();
 
+
         board[3][3].setType(BoardSpace.SpaceType.WHITE);
         board[3][4].setType(BoardSpace.SpaceType.BLACK);
         board[4][3].setType(BoardSpace.SpaceType.BLACK);
         board[4][4].setType(BoardSpace.SpaceType.WHITE);
-
-
     }
 
     @Test
@@ -51,8 +50,5 @@ public class OthelloGameTest {
         expectedOrigin4.add(board[3][4]);
         expected.put(board[5][4], expectedOrigin4);
     }
-
-
-
 
 }
