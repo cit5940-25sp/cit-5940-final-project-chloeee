@@ -7,12 +7,27 @@ import java.util.List;
 import java.util.Map;
 
 public class MinimaxStrategy implements Strategy {
+    private int MAX_DEPTH = 2;
 
     // TO DO
     @Override
+    // Calls the recursive function
     public BoardSpace selectMove(BoardSpace[][] board, Player player, Player opponent) {
         //get potential move
-
+        int maxScore = Integer.MIN_VALUE;
+        BoardSpace move = null;
+        for (BoardSpace futureMoves : player.getAvailableMoves(board).keySet()) {
+            //simulate move
+            BoardSpace[][] copiedBoard = copyBoard(board);
+            simulate(copiedBoard, player, futureMoves, player.getAvailableMoves(board).get(futureMoves));
+            //recursive call
+            int score = minmaximizer(copiedBoard, player, opponent, MAX_DEPTH, false);
+            if (score > maxScore) {
+                maxScore = score;
+                move = futureMoves; 
+            }
+        }
+        return move;
     }
 
     // Returns score
@@ -27,11 +42,14 @@ public class MinimaxStrategy implements Strategy {
             for (BoardSpace move : availableMoves.keySet()) {
                 //simulate move
                 BoardSpace[][] copiedBoard = copyBoard(board);
-                // Recursive call
-                minmaximizer(board, player, opponent, depth-1, false);
-                int resultScore = simulate(copiedBoard, player, move,availableMoves.get(move));
-                maxScore = Math.max(resultScore, maxScore);
+                // Immediate result board after my single move, 
+                // changing the board to pass into the recursive call
+                simulate(copiedBoard, player, move, availableMoves.get(move));
+                // This is the result of my move (opponent's turn)
+                int score = minmaximizer(copiedBoard, player, opponent, depth-1, false);
+                maxScore = Math.max(maxScore, score);
             }
+            return maxScore;
         }
         // Minimizer
         else {
@@ -40,15 +58,15 @@ public class MinimaxStrategy implements Strategy {
             for (BoardSpace move : availableMoves.keySet()) {
                 //simulate move
                 BoardSpace[][] copiedBoard = copyBoard(board);
-                int resultScore = simulate(copiedBoard, player, move,availableMoves.get(move));
-                minScore = Math.min(resultScore, minScore);
+                simulate(copiedBoard, player, move,availableMoves.get(move));
+                int score = minmaximizer(copiedBoard, player, opponent, depth-1, true);
+                minScore = Math.min(minScore, score);
             }
+            return minScore;
         }
-
-        return 0;
     }
 
-    private int simulate(BoardSpace[][] board, Player player, BoardSpace dest, List<BoardSpace> origins) {
+    private void simulate(BoardSpace[][] board, Player player, BoardSpace dest, List<BoardSpace> origins) {
         // Change the destination color
         board[dest.getX()][dest.getY()].setType(player.getColor());
 
@@ -77,7 +95,7 @@ public class MinimaxStrategy implements Strategy {
         BoardSpace[][] newBoard = new BoardSpace[board.length][board[0].length];
         for (int row = 0; row < board.length; row ++) {
             for (int col = 0; col < board[0].length; col++) {
-                newBoard[row][col] = board[row][col];
+                newBoard[row][col] = new BoardSpace(board[row][col].getX(), board[row][col].getY(), board[row][col].getType());
             }
         }
         return newBoard;
@@ -90,7 +108,7 @@ public class MinimaxStrategy implements Strategy {
             for (int col =0; col < board[0].length; col++) {
                 if (board[row][col].getType() == player.getColor()) {
                     score += Constants.BOARD_WEIGHTS[row][col];
-                } else if ((board[row][col].getType() != BoardSpace.SpaceType.EMPTY) {
+                } else if (board[row][col].getType() != BoardSpace.SpaceType.EMPTY) {
                     score -= Constants.BOARD_WEIGHTS[row][col];
                 }
             }
