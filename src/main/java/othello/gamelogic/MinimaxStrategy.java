@@ -8,11 +8,23 @@ import java.util.Map;
 
 public class MinimaxStrategy implements Strategy {
     private int MAX_DEPTH = 2;
+    private int nodesEvaluated = 0;  // Counter for node evaluations
+    
+    // Getter for nodes evaluated
+    public int getNodesEvaluated() {
+        return nodesEvaluated;
+    }
+    
+    // Reset counter
+    public void resetNodesEvaluated() {
+        nodesEvaluated = 0;
+    }
 
     // TO DO
     @Override
     // Calls the recursive function
     public BoardSpace selectMove(BoardSpace[][] board, Player player, Player opponent) {
+        resetNodesEvaluated();  // Reset counter before each move
         //get potential move
         int maxScore = Integer.MIN_VALUE;
         BoardSpace move = null;
@@ -32,6 +44,8 @@ public class MinimaxStrategy implements Strategy {
 
     // Returns score
     private int minmaximizer(BoardSpace[][] board, Player player, Player opponent, int depth, boolean maximizing) {
+        nodesEvaluated++;  // Increment counter for each node evaluated (check efficiency)
+        
         if (depth == 0) {
             return scoreBoard(board, player);
         }
@@ -58,7 +72,7 @@ public class MinimaxStrategy implements Strategy {
             for (BoardSpace move : availableMoves.keySet()) {
                 //simulate move
                 BoardSpace[][] copiedBoard = copyBoard(board);
-                simulate(copiedBoard, player, move,availableMoves.get(move));
+                simulate(copiedBoard, opponent, move,availableMoves.get(move));
                 int score = minmaximizer(copiedBoard, player, opponent, depth-1, true);
                 minScore = Math.min(minScore, score);
             }
