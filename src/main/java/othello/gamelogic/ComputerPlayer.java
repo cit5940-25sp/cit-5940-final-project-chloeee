@@ -1,8 +1,5 @@
 package othello.gamelogic;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Represents a computer player that will make decisions autonomously during their turns.
  * Employs a specific computer strategy passed in through program arguments.

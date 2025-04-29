@@ -72,4 +72,13 @@ public class BoardSpace {
             return fill;
         }
     }
+
+    @Override
+    public String toString() {
+        return "BoardSpace{" +
+                "x=" + x +
+                ", y=" + y +
+                ", type=" + type +
+                '}';
+    }
 }

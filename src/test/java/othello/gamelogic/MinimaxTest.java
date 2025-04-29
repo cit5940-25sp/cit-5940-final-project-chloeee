@@ -7,12 +7,10 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 public class MinimaxTest {
-    private Player player1;
-    private Player player2;
+    private ComputerPlayer player1;
+    private HumanPlayer player2;
     public static final int GAME_BOARD_SIZE = 8;
     BoardSpace[][] board;
-    private MinimaxStrategy minimaxStrategy;
-
     @Before
     public void setUp() {
         player1 = new ComputerPlayer("minimax");
@@ -22,7 +20,6 @@ public class MinimaxTest {
         OthelloGame game = new OthelloGame(player1, player2);
         game.initBoard();
         board = game.getBoard();
-        minimaxStrategy = new MinimaxStrategy();
 
         // Set up initial board state
         board[3][3].setType(BoardSpace.SpaceType.WHITE);
@@ -34,7 +31,7 @@ public class MinimaxTest {
     @Test
     public void testSelectMoveInitialState() {
         // Test initial board state
-        BoardSpace move = minimaxStrategy.selectMove(board, player1, player2);
+        BoardSpace move = player1.chooseMove(board, player1, player2);
         assertNotNull("Move should not be null", move);
         assertTrue("Move should be a valid move", player1.getAvailableMoves(board).containsKey(move));
     }
@@ -61,7 +58,7 @@ public class MinimaxTest {
             System.out.println("Move: (" + move.getX() + "," + move.getY() + ")");
         }
         
-        BoardSpace move = minimaxStrategy.selectMove(board, player1, player2);
+        BoardSpace move = player1.chooseMove(board, player1, player2);
         System.out.println("Selected move: (" + move.getX() + "," + move.getY() + ")");
         
         assertNotNull("Move should not be null", move);
@@ -133,7 +130,7 @@ public class MinimaxTest {
         board[6][7].setType(BoardSpace.SpaceType.WHITE);
         board[7][6].setType(BoardSpace.SpaceType.WHITE);
         
-        BoardSpace move = minimaxStrategy.selectMove(board, player1, player2);
+        BoardSpace move = player1.chooseMove(board, player1, player2);
         assertNotNull("Move should not be null", move);
         assertTrue("Move should be a valid move", player1.getAvailableMoves(board).containsKey(move));
     }
@@ -149,7 +146,7 @@ public class MinimaxTest {
             }
         }
         
-        BoardSpace move = minimaxStrategy.selectMove(board, player1, player2);
+        BoardSpace move = player1.chooseMove(board, player1, player2);
         assertNull("Should return null when no moves available", move);
     }
 }

@@ -19,6 +19,10 @@ public class OthelloGame {
         initBoard();
     }
 
+    public void setBoard(BoardSpace[][] board) {
+        this.board = board;
+    }
+
     public BoardSpace[][] getBoard() {
         return board;
     }
@@ -123,6 +127,7 @@ public class OthelloGame {
         List<BoardSpace> origins = availableMoves.get(selectedDestination);
 
         // For every origin space in List, flip all pieces between origin and destination
+        if(origins == null) return; //debug/testing //error: origin完全有可能是null，比如你
         for (BoardSpace origin : origins) {
             // Indicate -1, 0, or 1 for the direction to take by comparing x-y coordinates of selected and origin spaces
             int dx = Integer.compare(selectedDestination.getX() - origin.getX(), 0);
@@ -150,7 +155,7 @@ public class OthelloGame {
      * @return the BoardSpace that was decided upon
      */
     public BoardSpace computerDecision(ComputerPlayer computer) {
-        return null;
+        return computer.chooseMove(board,playerOne,playerTwo);
     }
 
 }
