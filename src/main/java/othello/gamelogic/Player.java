@@ -72,7 +72,7 @@ public abstract class Player {
         int nextY = y + dy;
 
         // Check if we're still within board bounds
-        if (nextX < 0 || nextX >= GAME_BOARD_SIZE || nextY < 0 || nextY >= GAME_BOARD_SIZE) {
+        if (nextX < 0 || nextX >= board.length || nextY < 0 || nextY >= board.length) {
             return null;
         }
 
