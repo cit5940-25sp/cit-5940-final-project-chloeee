@@ -7,7 +7,7 @@ import othello.Constants;
 
 public class MCTSStrategy implements Strategy{
 
-    private static final double EXPLORATION_PARAM = Math.sqrt(2);
+//    private static final double EXPLORATION_PARAM = Math.sqrt(2);
     private static final double NUM_ITERATION = 100;
 
 
@@ -79,7 +79,7 @@ public class MCTSStrategy implements Strategy{
             if(child.getVisits() == 0 || node.getVisits() == 0){ //1.debug: node has a visit of 0, which results in cur_UCT being NaN，the whole thing crash
                 cur_UCT = Double.POSITIVE_INFINITY; //error：when visits is 0, make its uct infinity，since we want to prioritize exploring unvisited spaces
             } else {
-            cur_UCT = (child.getWins() / (double)child.getVisits()) + EXPLORATION_PARAM * Math.sqrt(Math.log(node.getVisits())/(double)child.getVisits());
+            cur_UCT = (child.getWins() / (double)child.getVisits()) + Constants.EXPLORATION_PARAM * Math.sqrt(Math.log(node.getVisits())/(double)child.getVisits());
             }
             if(cur_UCT > bestUCT || bestNode == null){
                 bestUCT = cur_UCT;
@@ -94,7 +94,7 @@ public class MCTSStrategy implements Strategy{
     }
 
 
-    private MCTSNode expansion(MCTSNode node, BoardSpace[][] board, Player player, Player opponent) {
+    MCTSNode expansion(MCTSNode node, BoardSpace[][] board, Player player, Player opponent) {
         //expansion就是长出节点
         List<BoardSpace> availableMove = getAvailableMove(board, player);
         //I need a helper function to create a deep copy of the board
@@ -118,7 +118,7 @@ public class MCTSStrategy implements Strategy{
     }
 
 
-    private boolean simulation(MCTSNode node, BoardSpace[][] board, Player player, Player opponent){
+    boolean simulation(MCTSNode node, BoardSpace[][] board, Player player, Player opponent){
         Player current_player = player;
         Player opponent_player = opponent;
         BoardSpace[][] newBoard = copyBoard(board); //question: do i need to make a newbaord here?
@@ -160,7 +160,7 @@ public class MCTSStrategy implements Strategy{
     }
 
 
-    private void backPropagation(boolean win, MCTSNode expandNode) {
+    void backPropagation(boolean win, MCTSNode expandNode) {
         //question:expandNode我是不是也需要increment？
 //        expandNode.incrementWins();
 //        expandNode.incrementWins();
@@ -191,13 +191,16 @@ public class MCTSStrategy implements Strategy{
             }
         }
 
+//👇🏻 used for debugging
+//        System.out.println("player score: " + playerScore);
+//        System.out.println("opponentScore score: " + opponentScore);
         return playerScore > opponentScore; //question: > or >=?
 
 
     }
 
 
-    private boolean isTerminal(BoardSpace[][] board, Player player, Player opponent){
+   boolean isTerminal(BoardSpace[][] board, Player player, Player opponent){
         //1.check whether the board is full
         boolean hasEmptySpot = false;
         for (int i = 0; i < board.length; i++) {
