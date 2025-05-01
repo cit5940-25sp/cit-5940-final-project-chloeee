@@ -1,5 +1,6 @@
 package othello.gui;
 
+import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,12 +8,14 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 import othello.gamelogic.*;
 
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.Long.toHexString;
 
 /**
  * Manages the interaction between model and view of the game.
@@ -32,10 +35,14 @@ public class GameController  {
     @FXML
     private Button computerTurnBtn;
 
+    @FXML private Button themeToggleBtn; // Added button
+
+
     // Private variables
     private OthelloGame og;
     private int skippedTurns;
     private GUISpace[][] guiBoard;
+    private Theme currentTheme; // adding the Theme
 
     /**
      * Starts the game, called after controller initialization  in start method of App.
@@ -44,6 +51,13 @@ public class GameController  {
      * @param arg1 type of player for player 1, either "human" or some computer strategy
      * @param arg2 type of player for player 2, either "human" or some computer strategy
      */
+
+    @FXML
+    public void initialize() {
+        currentTheme = new LightTheme(); //set the default theme
+        applyTheme();
+    }
+
     public void initGame(String arg1, String arg2) {
         Player playerOne;
         Player playerTwo;
@@ -75,6 +89,50 @@ public class GameController  {
         turnText(playerOne);
         takeTurn(playerOne);
     }
+
+    @FXML
+    protected void toggleTheme() {
+        if (currentTheme instanceof LightTheme) {
+            currentTheme = new DarkTheme();
+            themeToggleBtn.setText("Light Mode");
+        } else {
+            currentTheme = new LightTheme();
+            themeToggleBtn.setText("Dark Mode");
+        }
+        applyTheme();
+    }
+
+    private void applyTheme() {
+        gameBoard.setStyle("-fx-background-color: " + colorToHex(currentTheme.getBackgroundColor()));
+        turnLabel.setTextFill(currentTheme.getTextColor());
+
+        if (guiBoard != null) {
+            for (GUISpace[] row : guiBoard) {
+                for (GUISpace space : row) {
+                    if (space != null) {
+                        space.setTheme(currentTheme);
+                    }
+                }
+            }
+        }
+    }
+
+    //helper mothod
+    private String colorToHex(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int)(color.getRed() * 255),
+                (int)(color.getGreen() * 255),
+                (int)(color.getBlue() * 255));
+    }
+
+    private String colorToCss(Color color) {
+        return String.format("-fx-background-color: rgba(%d, %d, %d, %.2f);",
+                (int)(color.getRed() * 255),
+                (int)(color.getGreen() * 255),
+                (int)(color.getBlue() * 255),
+                color.getOpacity());
+    }
+
 
     /**
      * Displays the board initially, adding the GUI squares into the window.
@@ -120,9 +178,20 @@ public class GameController  {
         guiBoard[4][3].addOrUpdateDisc(BoardSpace.SpaceType.BLACK);
     }
 
+
     /**
      * Displays the score of the board and the current turn.
      */
+//    @FXML
+//    protected void turnText(Player player) {
+//        String humanOrCom = player instanceof HumanPlayer ? "(Human)\n" : "(Computer)\n";
+//        turnCircle.setFill(player.getColor().fill());
+//        turnLabel.setText(
+//                player.getColor() + "'s Turn\n" + humanOrCom + "Score: \n" +
+//                        og.getPlayerOne().getColor() + ": " + og.getPlayerOne().getPlayerOwnedSpacesSpaces().size() + " - " +
+//                        og.getPlayerTwo().getColor() + ": " + og.getPlayerTwo().getPlayerOwnedSpacesSpaces().size());
+//    }
+
     @FXML
     protected void turnText(Player player) {
         String humanOrCom = player instanceof HumanPlayer ? "(Human)\n" : "(Computer)\n";
@@ -131,6 +200,39 @@ public class GameController  {
                 player.getColor() + "'s Turn\n" + humanOrCom + "Score: \n" +
                         og.getPlayerOne().getColor() + ": " + og.getPlayerOne().getPlayerOwnedSpacesSpaces().size() + " - " +
                         og.getPlayerTwo().getColor() + ": " + og.getPlayerTwo().getPlayerOwnedSpacesSpaces().size());
+        turnLabel.setTextFill(currentTheme.getTextColor());
+    }
+
+    /*
+    Add animation feature
+     */
+
+    private void animateDiscFlip(int x, int y, BoardSpace.SpaceType newType) {
+        GUISpace space = guiBoard[x][y];
+        Circle animationDisc = new Circle();
+
+        int squareCenter = GUISpace.SQUARE_SIZE / 2;
+        animationDisc.setRadius(squareCenter - 5);
+        animationDisc.setFill(newType.fill());
+        animationDisc.setStroke(Color.BLACK);
+        animationDisc.setCenterX(squareCenter);
+        animationDisc.setCenterY(squareCenter);
+
+        animationDisc.setScaleX(0);
+        animationDisc.setScaleY(0);
+
+        space.getSquare().getChildren().add(animationDisc);
+
+        ScaleTransition st = new ScaleTransition(Duration.millis(300), animationDisc);
+        st.setFromX(0);
+        st.setFromY(0);
+        st.setToX(1);
+        st.setToY(1);
+        st.setOnFinished(e -> {
+            space.getSquare().getChildren().remove(animationDisc);
+            space.addOrUpdateDisc(newType);
+        });
+        st.play();
     }
 
     /**
