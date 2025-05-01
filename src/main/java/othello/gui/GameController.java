@@ -105,6 +105,14 @@ public class GameController  {
             themeToggleBtn.setText("Dark Mode");
         }
         applyTheme();
+
+//        // If it's a human player's turn, re-show available moves with new theme colors
+        Player currentPlayer = og.getCurrentPlayer(); // You'll need to add getCurrentPlayer() to OthelloGame
+        // If it's a human player's turn, re-show available moves
+        if (currentPlayer instanceof HumanPlayer) {
+            showMoves((HumanPlayer) currentPlayer);
+        }
+
     }
 
     private void applyTheme() {

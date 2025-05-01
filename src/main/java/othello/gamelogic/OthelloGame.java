@@ -12,12 +12,21 @@ public class OthelloGame {
     private BoardSpace[][] board;
     private final Player playerOne;
     private final Player playerTwo;
+    private Player currentPlayer;
 
     public OthelloGame(Player playerOne, Player playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
+        this.currentPlayer = playerOne;
         initBoard();
     }
+
+    public Player getCurrentPlayer() {
+        // Return whichever player's turn it is currently
+        // You'll need to implement this based on how you track turns
+        return currentPlayer;
+    }
+
 
     public void setBoard(BoardSpace[][] board) {
         this.board = board;
