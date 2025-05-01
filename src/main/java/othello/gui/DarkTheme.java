@@ -23,4 +23,9 @@ public class DarkTheme implements Theme {
     @Override public Color getPlayerTwoScoreColor() { return Color.WHITE; }
     @Override public Color getScoreBackgroundColor() { return Color.DARKSLATEGRAY.darker(); }
     @Override public Color getScoreTextColor() { return Color.WHITE; }
+
+    @Override
+    public Color getRightPanelColor() {
+        return Color.web("#8C3A3A");
+    }
 }

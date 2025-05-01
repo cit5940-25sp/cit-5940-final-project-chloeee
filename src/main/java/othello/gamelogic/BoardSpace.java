@@ -61,8 +61,8 @@ public class BoardSpace {
      */
     public enum SpaceType {
         EMPTY(Color.GRAY),
-        BLACK(Color.BLACK),
-        WHITE(Color.WHITE);
+        BLACK(Color.web("#393E46")),
+        WHITE(Color.web("#FAF6E9"));
 
         private final Color fill;
 

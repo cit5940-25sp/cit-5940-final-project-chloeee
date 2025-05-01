@@ -24,6 +24,7 @@ public interface Theme {
     Color getScoreBackgroundColor();
     Color getScoreTextColor();
 
+    Color getRightPanelColor(); //
     // New visual elements
     default boolean supportsAnimatedTransitions() {
         return true;

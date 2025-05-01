@@ -6,7 +6,7 @@ import javafx.util.Duration;
 public class LightTheme implements Theme {
     // Basic colors
     @Override public Color getBackgroundColor() { return Color.LIGHTGRAY; }
-    @Override public Color getBoardColor() { return Color.LIMEGREEN; }
+    @Override public Color getBoardColor() { return Color.web("#A0C878");}
     @Override public Color getTextColor() { return Color.BLACK; }
 
     // Move indication
@@ -23,4 +23,9 @@ public class LightTheme implements Theme {
     @Override public Color getPlayerTwoScoreColor() { return Color.WHITE; }
     @Override public Color getScoreBackgroundColor() { return Color.LIGHTGRAY; }
     @Override public Color getScoreTextColor() { return Color.BLACK; }
+
+    @Override
+    public Color getRightPanelColor() {
+        return Color.web("#FDAB9E"); // 라이트 모드 기본값 (원하는 색상으로 변경 가능)
+    }
 }

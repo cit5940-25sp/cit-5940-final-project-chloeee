@@ -3,6 +3,7 @@ package othello.gui;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -13,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import othello.gamelogic.*;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +45,10 @@ public class GameController  {
     @FXML private Rectangle whiteScoreBar;
     @FXML private Rectangle blackScoreBackground;
     @FXML private Rectangle whiteScoreBackground;
-    @FXML private Label scoreLabel;
+
+    @FXML private Pane rightPanel;
+
+//    @FXML private Label scoreLabel;
 
 
     // Private variables
@@ -64,6 +69,7 @@ public class GameController  {
     public void initialize() {
         currentTheme = new LightTheme(); //set the default theme
         applyTheme();
+        rightPanel.setStyle("-fx-background-color: " + colorToHex(currentTheme.getRightPanelColor()));
     }
 
     public void initGame(String arg1, String arg2) {
@@ -133,7 +139,7 @@ public class GameController  {
         int total = blackScore + whiteScore;
 
         // Update text score
-        scoreLabel.setText(blackScore + " - " + whiteScore);
+//        scoreLabel.setText(blackScore + " - " + whiteScore);
 
         // Update visual bars
 //        double blackPercentage = total > 0 ? (double)blackScore / total : 0.5;
@@ -163,6 +169,10 @@ public class GameController  {
     }
 
     private void applyTheme() {
+        rightPanel.setStyle(
+                "-fx-background-color: " + colorToHex(currentTheme.getRightPanelColor()) +
+                        "; -fx-border-color: black; -fx-border-width: 0 0 0 2;"
+        );
         gameBoard.setStyle("-fx-background-color: " + colorToHex(currentTheme.getBackgroundColor()));
         turnLabel.setTextFill(currentTheme.getTextColor());
 
@@ -453,7 +463,6 @@ public class GameController  {
                 gameBoard.getChildren().add(newSquare);
                 guiBoard[destination.getX()][destination.getY()] = guiSpace;
             }
-            updateScoreBoard();
         }
 
         // Recolor the bg of the destination
@@ -467,6 +476,8 @@ public class GameController  {
         // Redisplay the new board
         clearBoard();
         displayBoard();
+
+        updateScoreBoard();
 
         // Next opponent turn
         turnText(otherPlayer(player));
