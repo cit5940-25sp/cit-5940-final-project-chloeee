@@ -203,15 +203,6 @@ public class GameController  {
     /**
      * Displays the score of the board and the current turn.
      */
-//    @FXML
-//    protected void turnText(Player player) {
-//        String humanOrCom = player instanceof HumanPlayer ? "(Human)\n" : "(Computer)\n";
-//        turnCircle.setFill(player.getColor().fill());
-//        turnLabel.setText(
-//                player.getColor() + "'s Turn\n" + humanOrCom + "Score: \n" +
-//                        og.getPlayerOne().getColor() + ": " + og.getPlayerOne().getPlayerOwnedSpacesSpaces().size() + " - " +
-//                        og.getPlayerTwo().getColor() + ": " + og.getPlayerTwo().getPlayerOwnedSpacesSpaces().size());
-//    }
 
     @FXML
     protected void turnText(Player player) {
