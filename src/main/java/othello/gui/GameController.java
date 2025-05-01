@@ -325,7 +325,10 @@ public class GameController  {
 
         } else {
             skippedTurns = 0;
-            BoardSpace selectedDestination = og.computerDecision(player);
+//            BoardSpace selectedDestination = og.computerDecision(player);
+            BoardSpace selectedDestination = player.chooseMove(og.getBoard(), player, otherPlayer(player));
+
+
             // From all origins, path to the destination and take spaces
             og.takeSpaces(player, otherPlayer(player), availableMoves, selectedDestination);
             updateGUIBoard(player, availableMoves, selectedDestination);
@@ -398,6 +401,11 @@ public class GameController  {
     @FXML
     protected void updateGUIBoard(Player player, Map<BoardSpace, List<BoardSpace>> availableMoves, BoardSpace selectedDestination) {
         List<BoardSpace> selectedOrigins = availableMoves.get(selectedDestination);
+        //👇🏻debug
+        if (selectedOrigins == null) {
+//            System.err.println("Error: selectedDestination is not in availableMoves!");
+            return;
+        }
         for (BoardSpace selectedOrigin : selectedOrigins) {
             int offsetX = selectedDestination.getX() - selectedOrigin.getX();
             int offsetY = selectedDestination.getY() - selectedOrigin.getY();
