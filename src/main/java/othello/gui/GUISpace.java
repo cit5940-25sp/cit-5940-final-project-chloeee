@@ -20,10 +20,10 @@ public class GUISpace {
     private BoardSpace.SpaceType type;
     private final int x;
     private final int y;
-    private Theme theme;
+    private Theme currentTheme;
 
     public void setTheme(Theme theme) {
-        this.theme = theme;
+        this.currentTheme = theme;
         bg.setFill(theme.getBoardColor());
     }
 
@@ -34,6 +34,7 @@ public class GUISpace {
         setSquare();
         addOrUpdateDisc(type);
     }
+
 
     /**
      * Sets the position of the space in the GUI.
