@@ -55,6 +55,14 @@ public class OthelloGame {
                 board[i][j] = new BoardSpace(i, j, BoardSpace.SpaceType.EMPTY);
             }
         }
+
+        //bug 1: only update the GUI but not the initial board
+        board[3][3].setType(BoardSpace.SpaceType.WHITE);
+        board[4][4].setType(BoardSpace.SpaceType.WHITE);
+        board[3][4].setType(BoardSpace.SpaceType.BLACK);
+        board[4][3].setType(BoardSpace.SpaceType.BLACK);
+
+
     }
 
     /**
