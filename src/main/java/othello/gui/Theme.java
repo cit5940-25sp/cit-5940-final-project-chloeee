@@ -7,4 +7,6 @@ public interface Theme {
     Color getBoardColor();
     Color getHighlightColor();
     Color getTextColor();
+    Color getAvailableMoveColor();
+    Color getAvailableMoveHoverColor();
 }

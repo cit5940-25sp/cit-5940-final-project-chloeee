@@ -63,22 +63,22 @@ public class GameController  {
         Player playerTwo;
 
         // Factory pattern implementation
-        playerOne = PlayerFactory.createPlayer(arg1);
-        playerTwo = PlayerFactory.createPlayer(arg2);
+//        playerOne = PlayerFactory.createPlayer(arg1);
+//        playerTwo = PlayerFactory.createPlayer(arg2);
         // Previous code without Factory pattern
 //        // Player 1
-//        if (arg1.equals("human")) {
-//            playerOne = new HumanPlayer();
-//        } else {
-//            playerOne = new ComputerPlayer(arg1);
-//        }
-//
-//        // Player 2
-//        if (arg2.equals("human")) {
-//            playerTwo = new HumanPlayer();
-//        } else {
-//            playerTwo = new ComputerPlayer(arg2);
-//        }
+        if (arg1.equals("human")) {
+            playerOne = new HumanPlayer();
+        } else {
+            playerOne = new ComputerPlayer(arg1);
+        }
+
+        // Player 2
+        if (arg2.equals("human")) {
+            playerTwo = new HumanPlayer();
+        } else {
+            playerTwo = new ComputerPlayer(arg2);
+        }
 
         // Set Colors
         playerOne.setColor(BoardSpace.SpaceType.BLACK);
@@ -119,6 +119,12 @@ public class GameController  {
                     }
                 }
             }
+        }
+        // Update computer turn button style
+        if (currentTheme instanceof LightTheme) {
+            computerTurnBtn.setStyle("-fx-background-color: #f0f0f0; -fx-text-fill: #000000;");
+        } else {
+            computerTurnBtn.setStyle("-fx-background-color: #555555; -fx-text-fill: #FFFFFF;");
         }
     }
 
@@ -289,7 +295,6 @@ public class GameController  {
             } else if (skippedTurns == 2 || og.getPlayerOne().getPlayerOwnedSpacesSpaces().size() + og.getPlayerTwo().getPlayerOwnedSpacesSpaces().size() == 64){
                 gameOver();
             }
-
         } else {
             skippedTurns = 0;
             for (BoardSpace destination : availableMoves.keySet()) {
