@@ -31,6 +31,41 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
+                        <VBox fx:id="scoreBoard" alignment="CENTER" spacing="10" prefWidth="250">
+                           <HBox alignment="CENTER" spacing="20">
+                              <VBox alignment="CENTER">
+                                 <StackPane>
+                                    <Rectangle fx:id="blackScoreBackground" fill="#e0e0e0" width="100" height="10"/>
+                                    <Rectangle fx:id="blackScoreBar" fill="RED" width="0" height="10"/>
+                                 </StackPane>
+                                 <Label text="BLACK" textFill="BLACK">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                              </VBox>
+                              <VBox alignment="CENTER">
+                                 <StackPane>
+                                    <Rectangle fx:id="whiteScoreBackground" fill="#e0e0e0" width="100" height="10"/>
+                                    <Rectangle fx:id="whiteScoreBar" fill="BLUE" width="0" height="10"/>
+                                 </StackPane>
+                                 <Label text="WHITE" textFill="WHITE">
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                              </VBox>
+                           </HBox>
+                           <Label fx:id="scoreLabel" text="0 - 0">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </Label>
+                        </VBox>
+
+
+
+
                         <Button fx:id="computerTurnBtn" mnemonicParsing="false" text="Take Computer Turn">
                            <font>
                               <Font size="16.0" />

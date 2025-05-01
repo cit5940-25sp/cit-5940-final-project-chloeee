@@ -1,6 +1,6 @@
 package othello.gui;
 
-import javafx.animation.ScaleTransition;
+import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import othello.gamelogic.*;
 
@@ -35,7 +36,14 @@ public class GameController  {
     @FXML
     private Button computerTurnBtn;
 
-    @FXML private Button themeToggleBtn; // Added button
+    @FXML
+    private Button themeToggleBtn; // Added button
+
+    @FXML private Rectangle blackScoreBar;
+    @FXML private Rectangle whiteScoreBar;
+    @FXML private Rectangle blackScoreBackground;
+    @FXML private Rectangle whiteScoreBackground;
+    @FXML private Label scoreLabel;
 
 
     // Private variables
@@ -89,6 +97,7 @@ public class GameController  {
         guiBoard = new GUISpace[8][8];
         displayBoard();
         initSpaces();
+        updateScoreBoard();
 
         // Player 1 starts the game
         turnText(playerOne);
@@ -105,6 +114,9 @@ public class GameController  {
             themeToggleBtn.setText("Dark Mode");
         }
         applyTheme();
+        updateScoreBoard();
+
+        animateButtonPress(themeToggleBtn);
 
 //        // If it's a human player's turn, re-show available moves with new theme colors
         Player currentPlayer = og.getCurrentPlayer(); // You'll need to add getCurrentPlayer() to OthelloGame
@@ -113,6 +125,41 @@ public class GameController  {
             showMoves((HumanPlayer) currentPlayer);
         }
 
+    }
+
+    private void updateScoreBoard() {
+        int blackScore = og.getPlayerOne().getPlayerOwnedSpacesSpaces().size();
+        int whiteScore = og.getPlayerTwo().getPlayerOwnedSpacesSpaces().size();
+        int total = blackScore + whiteScore;
+
+        // Update text score
+        scoreLabel.setText(blackScore + " - " + whiteScore);
+
+        // Update visual bars
+//        double blackPercentage = total > 0 ? (double)blackScore / total : 0.5;
+//        double whitePercentage = total > 0 ? (double)whiteScore / total : 0.5;
+        double blackWidth = total > 0 ? (blackScore / (double) total) * 100 : 0;
+        double whiteWidth = total > 0 ? (whiteScore / (double) total) * 100 : 0;
+
+//        ScaleTransition blackTransition = new ScaleTransition(Duration.millis(500), blackScoreBar);
+//        blackTransition.setToX(blackPercentage);
+//
+//        ScaleTransition whiteTransition = new ScaleTransition(Duration.millis(500), whiteScoreBar);
+//        whiteTransition.setToX(whitePercentage);
+//
+//        ParallelTransition parallelTransition = new ParallelTransition(blackTransition, whiteTransition);
+//        parallelTransition.play();
+        Timeline blackTimeline = new Timeline(
+                new KeyFrame(Duration.millis(500),
+                        new KeyValue(blackScoreBar.widthProperty(), blackWidth))
+        );
+
+        Timeline whiteTimeline = new Timeline(
+                new KeyFrame(Duration.millis(500),
+                        new KeyValue(whiteScoreBar.widthProperty(), whiteWidth))
+        );
+
+        new ParallelTransition(blackTimeline, whiteTimeline).play();
     }
 
     private void applyTheme() {
@@ -219,6 +266,25 @@ public class GameController  {
     Add animation feature
      */
 
+    private void animateButtonPress(Button button) {
+        String originalStyle = button.getStyle();
+        Color animationColor = currentTheme.getButtonPressAnimationColor();
+        String hexColor = String.format("#%02X%02X%02X",
+                (int)(animationColor.getRed() * 255),
+                (int)(animationColor.getGreen() * 255),
+                (int)(animationColor.getBlue() * 255));
+
+        button.setStyle(originalStyle + "-fx-effect: dropshadow(gaussian, " + hexColor + ", 20, 0.5, 0, 0);");
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(button.opacityProperty(), 1.0)),
+                new KeyFrame(currentTheme.getButtonPressAnimationDuration(),
+                        new KeyValue(button.opacityProperty(), 0.7),
+                        new KeyValue(button.styleProperty(), originalStyle))
+        );
+        timeline.play();
+    }
+
     private void animateDiscFlip(int x, int y, BoardSpace.SpaceType newType) {
         GUISpace space = guiBoard[x][y];
         Circle animationDisc = new Circle();
@@ -246,6 +312,8 @@ public class GameController  {
         });
         st.play();
     }
+
+
 
     /**
      * Displays the score of the board.
@@ -352,6 +420,7 @@ public class GameController  {
             turnText(otherPlayer(player));
             takeTurn(otherPlayer(player));
         }
+        updateScoreBoard();
 
     }
 
@@ -384,6 +453,7 @@ public class GameController  {
                 gameBoard.getChildren().add(newSquare);
                 guiBoard[destination.getX()][destination.getY()] = guiSpace;
             }
+            updateScoreBoard();
         }
 
         // Recolor the bg of the destination
