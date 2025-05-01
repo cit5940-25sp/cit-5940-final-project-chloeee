@@ -144,6 +144,8 @@ public class GameController  {
         for (BoardSpace[] spaces : board) {
             for (BoardSpace space : spaces) {
                 GUISpace guiSpace = new GUISpace(space.getX(), space.getY(), space.getType());
+                //bug fix
+                guiSpace.setTheme(currentTheme);
                 Pane square = guiSpace.getSquare();
                 gameBoard.getChildren().add(square);
                 guiBoard[space.getX()][space.getY()] = guiSpace;
