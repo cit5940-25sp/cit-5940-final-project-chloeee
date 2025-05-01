@@ -47,19 +47,24 @@ public class GameController  {
     public void initGame(String arg1, String arg2) {
         Player playerOne;
         Player playerTwo;
-        // Player 1
-        if (arg1.equals("human")) {
-            playerOne = new HumanPlayer();
-        } else {
-            playerOne = new ComputerPlayer(arg1);
-        }
 
-        // Player 2
-        if (arg2.equals("human")) {
-            playerTwo = new HumanPlayer();
-        } else {
-            playerTwo = new ComputerPlayer(arg2);
-        }
+        // Factory pattern implementation
+        playerOne = PlayerFactory.createPlayer(arg1);
+        playerTwo = PlayerFactory.createPlayer(arg2);
+        // Previous code without Factory pattern
+//        // Player 1
+//        if (arg1.equals("human")) {
+//            playerOne = new HumanPlayer();
+//        } else {
+//            playerOne = new ComputerPlayer(arg1);
+//        }
+//
+//        // Player 2
+//        if (arg2.equals("human")) {
+//            playerTwo = new HumanPlayer();
+//        } else {
+//            playerTwo = new ComputerPlayer(arg2);
+//        }
 
         // Set Colors
         playerOne.setColor(BoardSpace.SpaceType.BLACK);
