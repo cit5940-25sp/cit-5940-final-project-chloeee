@@ -20,6 +20,12 @@ public class GUISpace {
     private BoardSpace.SpaceType type;
     private final int x;
     private final int y;
+    private Theme theme;
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+        bg.setFill(theme.getBoardColor());
+    }
 
     public GUISpace(int x, int y, BoardSpace.SpaceType type) {
         this.x = x;

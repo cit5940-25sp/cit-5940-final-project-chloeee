@@ -36,6 +36,9 @@ public abstract class Player {
      * @return a map with a destination BoardSpace mapped to a List of origin BoardSpaces.
      */
     public Map<BoardSpace, List<BoardSpace>> getAvailableMoves(BoardSpace[][] board) {
+        //👇🏻debug
+//        System.out.println("Checking moves for color: " + color);
+
         Map<BoardSpace, List<BoardSpace>> availableMoves = new HashMap<>();
 
         int[][] directions = {{1, 0}, {0, 1}, {-1, 0}, {0, -1},
@@ -51,6 +54,14 @@ public abstract class Player {
                         int dx = dir[0];
                         int dy = dir[1];
                         BoardSpace origin = getSingleOrigin(i, j, dx, dy, board);
+
+                        //debug👇🏻
+//                        if (origins.isEmpty()) {
+//                            System.out.println("empty origin");
+////                            availableMoves.put(current, origins);
+//                        }
+
+
                         if (origin != null) {
                             origins.add(origin);
                         }
@@ -67,6 +78,42 @@ public abstract class Player {
         return availableMoves;
     }
 
+//    private BoardSpace getSingleOrigin(int x, int y, int dx, int dy, BoardSpace[][] board) {
+//        int nextX = x + dx;
+//        int nextY = y + dy;
+//
+//        if (nextX < 0 || nextX >= board.length || nextY < 0 || nextY >= board[0].length) {
+//            return null;
+//        }
+//
+//        BoardSpace current = board[nextX][nextY];
+//
+//        if (current.getType() == BoardSpace.SpaceType.EMPTY || current.getType() == color) {
+//            return null;
+//        }
+//
+//        BoardSpace firstOpponent = current;
+//
+//        while (true) {
+//            nextX += dx;
+//            nextY += dy;
+//
+//            if (nextX < 0 || nextX >= board.length || nextY < 0 || nextY >= board[0].length) {
+//                return null;
+//            }
+//
+//            current = board[nextX][nextY];
+//            if (current.getType() == BoardSpace.SpaceType.EMPTY) {
+//                return null;
+//            }
+//
+//            if (current.getType() == color) {
+//                return firstOpponent;  // ✅ return the sandwiching opponent piece
+//            }
+//        }
+//    }
+
+
     private BoardSpace getSingleOrigin(int x, int y, int dx, int dy, BoardSpace[][] board) {
         int nextX = x + dx;
         int nextY = y + dy;
@@ -77,7 +124,7 @@ public abstract class Player {
         }
 
         BoardSpace current = board[nextX][nextY];
-        
+
         // If the adjacent space is empty or same color, not a valid move
         if (current.getType() == BoardSpace.SpaceType.EMPTY || current.getType() == color) {
             return null;
@@ -87,12 +134,12 @@ public abstract class Player {
         while (true) {
             nextX += dx;
             nextY += dy;
-            
+
             // Check bounds
             if (nextX < 0 || nextX >= GAME_BOARD_SIZE || nextY < 0 || nextY >= GAME_BOARD_SIZE) {
                 return null;
             }
-            
+
             current = board[nextX][nextY];
             if (current.getType() == BoardSpace.SpaceType.EMPTY) {
                 return null;

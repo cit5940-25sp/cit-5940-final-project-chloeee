@@ -38,6 +38,9 @@ public class App extends javafx.application.Application {
         }
         controller.initGame(argList.get(0), argList.get(1));
         Scene scene = new Scene(root, 960, 600);
+        // Added this line for style
+        scene.getStylesheets().add(getClass().getResource("/othello/light-theme.css").toExternalForm());
+        // Rest of them are the same
         stage.setTitle("Othello Demo");
         stage.setScene(scene);
         stage.show();

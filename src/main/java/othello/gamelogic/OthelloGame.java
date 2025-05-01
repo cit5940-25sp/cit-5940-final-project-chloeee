@@ -56,7 +56,7 @@ public class OthelloGame {
             }
         }
 
-        //standard Othello configuration
+        //standard Othello configuration - fix bug 1: ensure we update both GUI and initial board
         board[3][3].setType(BoardSpace.SpaceType.WHITE);
         board[3][4].setType(BoardSpace.SpaceType.BLACK);
         board[4][3].setType(BoardSpace.SpaceType.BLACK);

@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="othello.gui.GameController">
    <left>
@@ -38,6 +39,19 @@
                      </children>
                   </VBox>
                </center>
+
+               <bottom>
+                  <Button fx:id="themeToggleBtn" mnemonicParsing="false" text="Dark Mode"
+                          style="-fx-background-color: #4a4a4a; -fx-text-fill: white; -fx-font-weight: bold;"
+                          onAction="#toggleTheme">
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </padding>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </bottom>
             </BorderPane>
          </children>
       </Pane>
