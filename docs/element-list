@@ -1,0 +1,4 @@
+module:othello
+othello
+othello.gamelogic
+othello.gui

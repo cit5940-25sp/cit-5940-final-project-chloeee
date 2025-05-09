@@ -5,8 +5,16 @@ package othello.gamelogic;
  * Employs a specific computer strategy passed in through program arguments.
  */
 public class ComputerPlayer extends Player{
+    /**
+     * The strategy used by this computer player to select moves.
+     */
     private Strategy strategy;
-
+    /**
+     * Constructs a ComputerPlayer with a specified strategy name.
+     * The strategy name determines which AI strategy the player will use.
+     *
+     * @param strategyName the name of the strategy ("minimax", "expectimax", "mcts", or others for custom)
+     */
     public ComputerPlayer(String strategyName) {
         // PART 2
         // TODO: Use the strategyName input to create a specific strategy class for this computer
