@@ -8,20 +8,20 @@ import static othello.gamelogic.OthelloGame.GAME_BOARD_SIZE;
 public class CustomStrategy implements Strategy {
     private int MAX_DEPTH = 2;
     private int nodesEvaluated = 0;  // Counter for node evaluations
+    private int testing = 0;
 
 
 
-    
     // Getter for nodes evaluated
     public int getNodesEvaluated() {
         return nodesEvaluated;
     }
-    
+
     // Reset counter
     public void resetNodesEvaluated() {
         nodesEvaluated = 0;
     }
-    
+
     @Override
     public BoardSpace selectMove(BoardSpace[][] board, Player player, Player opponent) {
         resetNodesEvaluated();  // Reset counter before each move
@@ -66,7 +66,7 @@ public class CustomStrategy implements Strategy {
     int minmaximizer(BoardSpace[][] board, Player player, Player opponent, int depth, boolean maximizing, int alpha, int beta) {
 //        System.out.println("I am called! depth : " + depth);
         nodesEvaluated++;  // to check the efficiency
-        
+
         if (depth == 0) { //so this is the base case
 //debug            for (BoardSpace[] boardSpaces : board) {
 //                for (BoardSpace boardSpace : boardSpaces) {
