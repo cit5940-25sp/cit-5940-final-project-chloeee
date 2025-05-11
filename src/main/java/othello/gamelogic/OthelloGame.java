@@ -14,6 +14,12 @@ public class OthelloGame {
     private final Player playerTwo;
     private Player currentPlayer;
 
+    /**
+     * Constructs a new OthelloGame with two players.
+     * Initializes the board and sets the current player to playerOne.
+     * @param playerOne the first player
+     * @param playerTwo the second player
+     */
     public OthelloGame(Player playerOne, Player playerTwo) {
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
@@ -21,25 +27,45 @@ public class OthelloGame {
         initBoard();
     }
 
+    /**
+     * Gets the player whose turn it is.
+     * @return the current player
+     */
     public Player getCurrentPlayer() {
         // Return whichever player's turn it is currently
         // You'll need to implement this based on how you track turns
         return currentPlayer;
     }
 
-
+    /**
+     * Sets the board with the specified configuration.
+     * Typically used for testing or loading game states.
+     * @param board the board to set
+     */
     public void setBoard(BoardSpace[][] board) {
         this.board = board;
     }
 
+    /**
+     * Gets the current state of the game board.
+     * @return the 2D array representing the board
+     */
     public BoardSpace[][] getBoard() {
         return board;
     }
 
+    /**
+     * Gets player one.
+     * @return player one
+     */
     public Player getPlayerOne() {
         return playerOne;
     }
 
+    /**
+     * Gets player two.
+     * @return player two
+     */
     public Player getPlayerTwo() {
         return  playerTwo;
     }
@@ -73,8 +99,6 @@ public class OthelloGame {
     }
 
     /**
-     * PART 1
-     * TODO: Implement this method
      * Claims the specified space for the acting player.
      * Should also check if the space being taken is already owned by the acting player,
      * should not claim anything if acting player already owns space at (x,y)
@@ -119,15 +143,14 @@ public class OthelloGame {
         actingPlayer.getPlayerOwnedSpacesSpaces();
     }
 
+
     /**
-     * PART 1
-     * TODO: Implement this method
-     * Claims spaces from all origins that lead to a specified destination.
-     * This is called when a player, human or computer, selects a valid destination.
-     * @param actingPlayer the player that will claim spaces
-     * @param opponent the opposing player, that may lose spaces
-     * @param availableMoves map of the available moves, that maps destination to list of origins
-     * @param selectedDestination the specific destination that a HUMAN player selected
+     * Executes a full move by the acting player, claiming the destination space
+     * and flipping all sandwiched opponent pieces based on origin points.
+     * @param actingPlayer the player making the move
+     * @param opponent the opponent player
+     * @param availableMoves map of valid destinations to their corresponding origin points
+     * @param selectedDestination the space the acting player has chosen to place a piece
      */
     // Whereas getAvailableMoves identifies where a player can legally place a piece and which existing pieces form valid "sandwich" lines
     // takeSpaces actually executes a move by placing a piece and flipping all sandwiched pieces
@@ -162,8 +185,6 @@ public class OthelloGame {
         }
     }
     /**
-     * PART 2
-     * TODO: Implement this method
      * Gets the computer decision for its turn.
      * Should call a method within the ComputerPlayer class that returns a BoardSpace using a specific strategy.
      * @param computer computer player that is deciding their move for their turn
