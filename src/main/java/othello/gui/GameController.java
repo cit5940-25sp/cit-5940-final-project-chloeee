@@ -26,30 +26,18 @@ import static java.lang.Long.toHexString;
 public class GameController  {
 
     // FXML Variables to manipulate UI components
-    @FXML
-    private Label turnLabel;
-
-    @FXML
-    private Pane gameBoard;
-
-    @FXML
-    private Circle turnCircle;
-
-    @FXML
-    private Button computerTurnBtn;
-
-    @FXML
-    private Button themeToggleBtn; // Added button
-
+    @FXML private Label turnLabel;
+    @FXML private Pane gameBoard;
+    @FXML private Circle turnCircle;
+    @FXML private Button computerTurnBtn;
+    @FXML private Button themeToggleBtn; // Added button
     @FXML private Rectangle blackScoreBar;
     @FXML private Rectangle whiteScoreBar;
     @FXML private Rectangle blackScoreBackground;
     @FXML private Rectangle whiteScoreBackground;
-
     @FXML private Pane rightPanel;
 
-//    @FXML private Label scoreLabel;
-
+    // @FXML private Label scoreLabel;
 
     // Private variables
     private OthelloGame og;
@@ -57,13 +45,7 @@ public class GameController  {
     private GUISpace[][] guiBoard;
     private Theme currentTheme; // adding the Theme
 
-    /**
-     * Starts the game, called after controller initialization  in start method of App.
-     * Sets the 2 players, their colors, and creates an OthelloGame for logic handling.
-     * Then, shows the first move, beginning the game "loop".
-     * @param arg1 type of player for player 1, either "human" or some computer strategy
-     * @param arg2 type of player for player 2, either "human" or some computer strategy
-     */
+
 
     @FXML
     public void initialize() {
@@ -72,6 +54,13 @@ public class GameController  {
         rightPanel.setStyle("-fx-background-color: " + colorToHex(currentTheme.getRightPanelColor()));
     }
 
+    /**
+     * Starts the game, called after controller initialization  in start method of App.
+     * Sets the 2 players, their colors, and creates an OthelloGame for logic handling.
+     * Then, shows the first move, beginning the game "loop".
+     * @param arg1 type of player for player 1, either "human" or some computer strategy
+     * @param arg2 type of player for player 2, either "human" or some computer strategy
+     */
     public void initGame(String arg1, String arg2) {
         Player playerOne;
         Player playerTwo;
@@ -110,6 +99,9 @@ public class GameController  {
         takeTurn(playerOne);
     }
 
+    /**
+     * Toggles between Light and Dark themes and applies the selected theme to the game board and UI.
+     */
     @FXML
     protected void toggleTheme() {
         if (currentTheme instanceof LightTheme) {
@@ -123,38 +115,24 @@ public class GameController  {
         updateScoreBoard();
 
         animateButtonPress(themeToggleBtn);
-
-//        // If it's a human player's turn, re-show available moves with new theme colors
+        // If it's a human player's turn, re-show available moves with new theme colors
         Player currentPlayer = og.getCurrentPlayer(); // You'll need to add getCurrentPlayer() to OthelloGame
         // If it's a human player's turn, re-show available moves
         if (currentPlayer instanceof HumanPlayer) {
             showMoves((HumanPlayer) currentPlayer);
         }
-
     }
 
+    /**
+     * Updates the visual score bars representing each player's score.
+     */
     private void updateScoreBoard() {
         int blackScore = countColor(og.getBoard(), og.getPlayerOne().getColor());
         int whiteScore = countColor(og.getBoard(), og.getPlayerTwo().getColor());
         int total = blackScore + whiteScore;
-
-        // Update text score
-//        scoreLabel.setText(blackScore + " - " + whiteScore);
-
-        // Update visual bars
-//        double blackPercentage = total > 0 ? (double)blackScore / total : 0.5;
-//        double whitePercentage = total > 0 ? (double)whiteScore / total : 0.5;
         double blackWidth = total > 0 ? (blackScore / (double) total) * 100 : 0;
         double whiteWidth = total > 0 ? (whiteScore / (double) total) * 100 : 0;
 
-//        ScaleTransition blackTransition = new ScaleTransition(Duration.millis(500), blackScoreBar);
-//        blackTransition.setToX(blackPercentage);
-//
-//        ScaleTransition whiteTransition = new ScaleTransition(Duration.millis(500), whiteScoreBar);
-//        whiteTransition.setToX(whitePercentage);
-//
-//        ParallelTransition parallelTransition = new ParallelTransition(blackTransition, whiteTransition);
-//        parallelTransition.play();
         Timeline blackTimeline = new Timeline(
                 new KeyFrame(Duration.millis(500),
                         new KeyValue(blackScoreBar.widthProperty(), blackWidth))
@@ -168,6 +146,9 @@ public class GameController  {
         new ParallelTransition(blackTimeline, whiteTimeline).play();
     }
 
+    /**
+     * Applies the current theme's colors to UI elements such as the game board, labels, and buttons.
+     */
     private void applyTheme() {
         rightPanel.setStyle(
                 "-fx-background-color: " + colorToHex(currentTheme.getRightPanelColor()) +
@@ -193,7 +174,12 @@ public class GameController  {
         }
     }
 
-    //helper mothod
+    /**
+     * Converts a JavaFX {@link Color} to its hexadecimal string representation.
+     *
+     * @param color the JavaFX Color to convert
+     * @return a hex string (e.g., "#FFFFFF")
+     */
     private String colorToHex(Color color) {
         return String.format("#%02X%02X%02X",
                 (int)(color.getRed() * 255),
@@ -201,6 +187,12 @@ public class GameController  {
                 (int)(color.getBlue() * 255));
     }
 
+    /**
+     * Converts a JavaFX {@link Color} to a CSS-compatible RGBA background string.
+     *
+     * @param color the JavaFX Color to convert
+     * @return a CSS rgba() string (e.g., "-fx-background-color: rgba(255, 255, 255, 1.0);")
+     */
     private String colorToCss(Color color) {
         return String.format("-fx-background-color: rgba(%d, %d, %d, %.2f);",
                 (int)(color.getRed() * 255),
@@ -256,6 +248,13 @@ public class GameController  {
         guiBoard[4][3].addOrUpdateDisc(BoardSpace.SpaceType.BLACK);
     }
 
+    /**
+     * Counts the number of board spaces that match the given type (BLACK or WHITE).
+     *
+     * @param board the current game board
+     * @param type the {@link BoardSpace.SpaceType} to count
+     * @return the number of matching board spaces
+     */
     private int countColor(BoardSpace[][] board, BoardSpace.SpaceType type) {
         int count = 0;
         for (BoardSpace[] row : board) {
@@ -333,7 +332,6 @@ public class GameController  {
         });
         st.play();
     }
-
 
 
     /**

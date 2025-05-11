@@ -14,16 +14,17 @@ import static othello.gamelogic.OthelloGame.GAME_BOARD_SIZE;
  */
 public abstract class Player {
     private final List<BoardSpace> playerOwnedSpaces = new ArrayList<>();
+
     /**
      * Returns the list of spaces currently owned by this player.
      *
      * @return a list of BoardSpace objects owned by the player
      */
-
     public List<BoardSpace> getPlayerOwnedSpacesSpaces() {
         return playerOwnedSpaces;
     }
     private BoardSpace.SpaceType color;
+
     /**
      * Sets the color (piece type) of this player.
      *
@@ -32,6 +33,7 @@ public abstract class Player {
     public void setColor(BoardSpace.SpaceType color) {
         this.color = color;
     }
+
     /**
      * Retrieves the current color (piece type) of this player.
      *
@@ -79,8 +81,6 @@ public abstract class Player {
                 }
             }
         }
-
-
         return availableMoves;
     }
 
