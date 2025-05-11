@@ -12,7 +12,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-
+/**
+ * Unit tests for the {@link OthelloGame} class.
+ * This test suite verifies the correctness of core game mechanics including board setup,
+ * move validation, move execution, flipping logic, computer decisions, and end game detection.
+ */
 
 public class OthelloGameTest {
     private Player player1 ;
@@ -20,6 +24,9 @@ public class OthelloGameTest {
     public static final int GAME_BOARD_SIZE = 8;
     BoardSpace[][] board;
 
+    /**
+     * Initializes a fresh game board and sets the initial 4 central pieces before each test.
+     */
     @Before
     public void setUp() {
         player1 = new HumanPlayer();
@@ -37,6 +44,10 @@ public class OthelloGameTest {
         board[4][4].setType(BoardSpace.SpaceType.WHITE);
     }
 
+    /**
+     * Tests whether {@link OthelloGame#initBoard()} correctly initializes the board with 4 center discs
+     * and the rest as empty spaces.
+     */
     @Test
     public void testInitBoard() {
         OthelloGame game = new OthelloGame(player1, player2);
@@ -66,7 +77,10 @@ public class OthelloGameTest {
         assertEquals(60, emptyCount); // 8x8 - 4 initial pieces
     }
 
-    // INCOMPLETE - always passes because we haven't done the method
+    /**
+     * Tests whether {@link Player#getAvailableMoves(BoardSpace[][])} returns the correct destinations and origins
+     * for the default board setup.
+     */
     @Test
     public void testAvailableSpace() {
 
@@ -150,6 +164,9 @@ public class OthelloGameTest {
         return false;
     }
 
+    /**
+     * Tests the {@link OthelloGame#takeSpace(Player, Player, int, int)} method for valid, invalid, and edge-case coordinates.
+     */
     @Test
     public void testTakeSpace() {
         OthelloGame game = new OthelloGame(player1, player2);
@@ -175,7 +192,9 @@ public class OthelloGameTest {
         game.takeSpace(player1, player2, 3, 8);
         // Board should remain unchanged for invalid coordinates
     }
-
+    /**
+     * Tests that {@link OthelloGame#takeSpaces(Player, Player, Map, BoardSpace)} flips opponent discs appropriately.
+     */
     @Test
     public void testTakeSpaces() {
         OthelloGame game = new OthelloGame(player1, player2);
@@ -210,8 +229,9 @@ public class OthelloGameTest {
             fail("Move at (2,2) not found in available moves");
         }
     }
-
-    // Tests specific behavior (number of moves, presence of a specific move) rather than the exact structure of the whole returned map.
+    /**
+     * Tests the correctness of {@link OthelloGame#getAvailableMoves(Player)} on multiple board states.
+     */
     @Test
     public void testGetAvailableMovesComprehensive() {
         // Test with different board configurations
@@ -251,7 +271,9 @@ public class OthelloGameTest {
         }
         assertTrue("Should find a move at (2,1)", moveFound);
     }
-
+    /**
+     * Tests that the {@link OthelloGame#computerDecision(ComputerPlayer)} method returns a valid move.
+     */
     @Test
     public void testComputerDecision() {
         ComputerPlayer computerPlayer = new ComputerPlayer("minimax");
@@ -276,7 +298,9 @@ public class OthelloGameTest {
         }
         assertTrue("Move should be valid", validMove);
     }
-
+    /**
+     * Tests the end-game condition and scoring logic by simulating a full board.
+     */
     @Test
     public void testEndGameCondition() {
         OthelloGame game = new OthelloGame(player1, player2);
@@ -313,9 +337,7 @@ public class OthelloGameTest {
                 }
             }
         }
-
         assertEquals(32, blackCount);
         assertEquals(32, whiteCount);
     }
-
 }

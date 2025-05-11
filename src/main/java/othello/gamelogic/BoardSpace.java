@@ -14,13 +14,24 @@ public class BoardSpace {
     private final int y;
     private SpaceType type;
 
+    /**
+     * Constructs a new BoardSpace with given coordinates and space type.
+     *
+     * @param x    the x-coordinate on the board
+     * @param y    the y-coordinate on the board
+     * @param type the initial type (EMPTY, BLACK, or WHITE)
+     */
     public BoardSpace(int x, int y, SpaceType type) {
         this.x = x;
         this.y = y;
         setType(type);
     }
 
-    // Copy constructor
+    /**
+     * Copy constructor for BoardSpace.
+     *
+     * @param other the BoardSpace to copy
+     */
     public BoardSpace(BoardSpace other) {
         this.x = other.x;
         this.y = other.y;
@@ -28,36 +39,44 @@ public class BoardSpace {
     }
 
     /**
-     * @return the x coordinate of this space
+     * Returns the x-coordinate of this space.
+     *
+     * @return the x value
      */
     public int getX() {
         return x;
     }
 
     /**
-     * @return the x coordinate of this space
+     * Returns the y-coordinate of this space.
+     *
+     * @return the y value
      */
     public int getY() {
         return y;
     }
 
     /**
-     * @return the Space of the current tile
+     * Returns the type of this space.
+     *
+     * @return the space type (EMPTY, BLACK, or WHITE)
      */
     public SpaceType getType() {
         return type;
     }
 
     /**
-     * Sets the type of the tile, then adds an othello chip (circle) to the tile.
-     * @param type Space to set this space to.
+     * Sets the type (piece color or empty) for this space.
+     *
+     * @param type the new type to assign
      */
     public void setType(SpaceType type) {
         this.type = type;
     }
 
     /**
-     * Represents the type of the board space, used for filling in the color of the space in the GUI
+     * Enum representing the type of a BoardSpace.
+     * Includes the associated color for display in the GUI.
      */
     public enum SpaceType {
         EMPTY(Color.GRAY),
@@ -65,16 +84,29 @@ public class BoardSpace {
         WHITE(Color.web("#FAF6E9"));
 
         private final Color fill;
-
+        /**
+         * Constructor for SpaceType.
+         *
+         * @param fill the Color associated with the type
+         */
         SpaceType(Color fill) {
             this.fill = fill;
         }
-
+        /**
+         * Constructor for SpaceType.
+         *
+         * @param fill the Color associated with the type
+         */
         public Color fill() {
             return fill;
         }
     }
 
+    /**
+     * Returns a string representation of the BoardSpace, including coordinates and type.
+     *
+     * @return a string describing the space
+     */
     @Override
     public String toString() {
         return "BoardSpace{" +
@@ -84,16 +116,4 @@ public class BoardSpace {
                 '}';
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        BoardSpace that = (BoardSpace) o;
-//        return x == that.x && y == that.y;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return 31 * x + y;
-//    }
 }

@@ -8,17 +8,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Unit tests for {@link MCTSStrategy}, a Monte Carlo Tree Search implementation.
+ * These tests validate MCTS logic including selection, expansion, simulation, and backpropagation.
+ */
 public class MCTSStrategyTest {
     private ComputerPlayer playerBlack;
     private HumanPlayer playerWhite;
     private BoardSpace[][] board;
-
     private MCTSNode root;
-
     private MCTSStrategy mctsStrategy;
-
     private static final int BOARD_SIZE = 8;
-
+    /**
+     * Initializes a simple board and players before each test.
+     */
     @Before
     public void setUp() {
         //we need 2 players and a board
@@ -29,7 +32,6 @@ public class MCTSStrategyTest {
         playerWhite = new HumanPlayer();
         playerWhite.setColor(BoardSpace.SpaceType.WHITE);
 
-
         //2. initialize board
         board = new BoardSpace[BOARD_SIZE][BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -37,7 +39,6 @@ public class MCTSStrategyTest {
                 board[i][j] = new BoardSpace(i, j, BoardSpace.SpaceType.EMPTY);
             }
         }
-
 
         //3.set up the initial layout for the board
         board[3][3] = new BoardSpace(2, 3, BoardSpace.SpaceType.BLACK);
@@ -47,31 +48,20 @@ public class MCTSStrategyTest {
         board[5][3] = new BoardSpace(4, 3, BoardSpace.SpaceType.WHITE);
         board[5][4] = new BoardSpace(4, 4, BoardSpace.SpaceType.WHITE);
 
-
         //4. initialize strategy
         mctsStrategy = new MCTSStrategy();
 
-
         //5.initialize root
         root = new MCTSNode(board, null, null);
-
     }
-
+    /**
+     * Tests that the MCTS strategy chooses a valid move that is:
+     * - not null
+     * - in the list of available moves
+     * - an empty board space
+     */
     @Test
     public void testChooseMove() {
-//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-//        for (int i = 0; i < BOARD_SIZE; i++) {
-//            for (int j = 0; j < BOARD_SIZE; j++) {
-//                System.out.print(board[i][j]);
-//            }
-//        }
-//        System.out.println();
-//        Map<BoardSpace, List<BoardSpace>> availableMoves = playerBlack.getAvailableMoves(board);
-//        for (BoardSpace boardSpace : availableMoves.keySet()) {
-//            System.out.println(boardSpace);
-//        }
-//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ debugging
-
         //1.test that computer are able to choose a move among the available moves
         BoardSpace chosenMove = playerBlack.chooseMove(board, playerBlack, playerWhite);
         System.out.println("Chosen move :" + chosenMove);
@@ -79,24 +69,12 @@ public class MCTSStrategyTest {
         assertNotNull(chosenMove);
         assertTrue(availableMoves.containsKey(chosenMove));
 
-
         //2.the chosen move needs to be an empty space
         assertEquals(chosenMove.getType(), BoardSpace.SpaceType.EMPTY);
-
-
-//        // Use MCTS to choose a move for the black player
-//        BoardSpace chosenMove = mctsStrategy.selectMove(board, playerBlack, playerWhite);
-//
-//        // Verify that the chosen move is valid
-//        assertNotNull("MCTS should return a valid move", chosenMove);
-//        assertTrue("Chosen move should be an empty space",
-//            board[chosenMove.getX()][chosenMove.getY()].getType() == BoardSpace.SpaceType.EMPTY);
-//
-//        // Optionally, verify that the move is one of the available moves
-//        Map<BoardSpace, List<BoardSpace>> availableMoves = playerBlack.getAvailableMoves(board);
-//        assertTrue("Chosen move should be in the list of available moves",
-//            availableMoves.containsKey(chosenMove));
     }
+    /**
+     * Tests that {@code bestMove()} correctly returns the most promising child based on win rate.
+     */
 
     @Test
     public void testBestMove() {
@@ -108,13 +86,11 @@ public class MCTSStrategyTest {
         MCTSNode child4 = new MCTSNode(board, parentNode, new BoardSpace(5, 2, BoardSpace.SpaceType.WHITE));
         MCTSNode child5 = new MCTSNode(board, parentNode, new BoardSpace(5, 5, BoardSpace.SpaceType.WHITE));
 
-
         parentNode.addChild(child1);
         parentNode.addChild(child2);
         parentNode.addChild(child3);
         parentNode.addChild(child4);
         parentNode.addChild(child5);
-
 
         for (int i = 0; i < 5; i++) {
             child1.incrementVisits();
@@ -123,7 +99,6 @@ public class MCTSStrategyTest {
             child4.incrementVisits();
             child1.incrementWins();
         }
-
 
         for (int i = 0; i < 2; i++) {
             child2.incrementWins();
@@ -135,13 +110,14 @@ public class MCTSStrategyTest {
         System.out.println(mctsStrategy.bestMove(parentNode));
         assertNotNull(mctsStrategy.bestMove(parentNode));
         assertEquals(mctsStrategy.bestMove(parentNode), child1.getMove());
-
     }
 
-
+    /**
+     * Tests that {@code findBestUCT()} returns the child with the best UCT score,
+     * prioritizing unexplored children (visits = 0).
+     */
     @Test
     public void testFindBestUCT() {
-
         //1.fake the parent child situation
         MCTSNode parentNode = new MCTSNode(board, null, null);
         MCTSNode child1 = new MCTSNode(board, parentNode, new BoardSpace(1, 2, BoardSpace.SpaceType.WHITE));
@@ -150,13 +126,11 @@ public class MCTSStrategyTest {
         MCTSNode child4 = new MCTSNode(board, parentNode, new BoardSpace(5, 2, BoardSpace.SpaceType.WHITE));
         MCTSNode child5 = new MCTSNode(board, parentNode, new BoardSpace(5, 5, BoardSpace.SpaceType.WHITE));
 
-
         parentNode.addChild(child1);
         parentNode.addChild(child2);
         parentNode.addChild(child3);
         parentNode.addChild(child4);
         parentNode.addChild(child5);
-
 
         for (int i = 0; i < 5; i++) {
             child1.incrementVisits();
@@ -167,7 +141,6 @@ public class MCTSStrategyTest {
             parentNode.incrementVisits();//debug: increment parent node also, so we are choosing the right children
         }
 
-
         for (int i = 0; i < 2; i++) {
             child2.incrementWins();
             child3.incrementWins();
@@ -177,15 +150,15 @@ public class MCTSStrategyTest {
         System.out.println(child1.getVisits());
 
         //2.test that in this case, we choose child5--the not explored one
-//        System.out.println(child5.getVisits());
-//        System.out.println(mctsStrategy.findBestUCT(parentNode).getMove());
+        // System.out.println(child5.getVisits());
+        // System.out.println(mctsStrategy.findBestUCT(parentNode).getMove());
         assertEquals(mctsStrategy.findBestUCT(parentNode), child5);
-
         //question: when parent visit == 0, randomly choose a child, is that a valid strategy?
-
-
     }
-
+    /**
+     * Tests that {@code expansion()} correctly adds children to the node
+     * and returns a child with a valid move.
+     */
     @Test
     public void testExpansion() {
 
@@ -202,17 +175,17 @@ public class MCTSStrategyTest {
 
         assertTrue(availableMoves.containsKey(randomChild.getMove()));
         assertEquals(randomChild.getParent(), root);
-
-
     }
 
-
+    /**
+     * Tests that {@code simulation()} returns a boolean and does not crash.
+     * Also verifies the outcome with a clearly winning board state.
+     */
     @Test
     public void testSimulation() {
         //1. since simulation is going until the end, let's just test whether it returns a value
         boolean result = mctsStrategy.simulation(root, board, playerBlack, playerWhite);
         assertTrue(result == true || result == false);
-
 
         //2.or we can manipulate the result by faking a situation where black is obvious more than white
         BoardSpace[][] newBoard = new BoardSpace[BOARD_SIZE][BOARD_SIZE];
@@ -222,22 +195,16 @@ public class MCTSStrategyTest {
             }
         }
 
-//        newBoard[0][0] = new BoardSpace(0, 0, BoardSpace.SpaceType.BLACK);
-//        newBoard[0][7] = new BoardSpace(0, 1, BoardSpace.SpaceType.BLACK);
-//        newBoard[0][7] = new BoardSpace(7, 7, BoardSpace.SpaceType.BLACK);
-//        newBoard[0][7] = new BoardSpace(7, 0, BoardSpace.SpaceType.BLACK);
-
         MCTSNode newRoot = new MCTSNode(newBoard, null, null);
-
-
 
         boolean result2 = mctsStrategy.simulation(newRoot, newBoard, playerBlack, playerWhite);
         assertTrue(result2);
-
-
     }
 
-
+    /**
+     * Ensures the simulation sometimes results in different outcomes,
+     * indicating randomness in game play when the result is not deterministic.
+     */
     @Test
     public void testSimulationDifferentResult() {
 
@@ -248,11 +215,12 @@ public class MCTSStrategyTest {
             boolean result = mctsStrategy.simulation(root, board, playerBlack, playerWhite);
             results.add(result);
         }
-
         assertEquals(results.size(), 2);
     }
 
-
+    /**
+     * Verifies that {@code simulation()} does not alter the original board state.
+     */
     @Test
     public void testSimulationNotChangeBoard() {
         //1.make a copy of the original board
@@ -264,12 +232,10 @@ public class MCTSStrategyTest {
             }
         }
 
-
         //2. run simulation on the
         for (int i = 0; i < 20; i++) {
             mctsStrategy.simulation(root, board, playerBlack, playerWhite);
         }
-
 
         //3.see whether the board changed
         boolean hasChanged = false;
@@ -282,16 +248,13 @@ public class MCTSStrategyTest {
                 }
             }
         }
-
         assertFalse(hasChanged);
-
-
-
     }
 
 
-
-
+    /**
+     * Tests that {@code isTerminal()} correctly detects a full board.
+     */
     @Test
     public void testIsTerminal() {
         BoardSpace[][] newBoard = new BoardSpace[BOARD_SIZE][BOARD_SIZE];
@@ -302,10 +265,11 @@ public class MCTSStrategyTest {
         }
         boolean terminal = mctsStrategy.isTerminal(newBoard, playerBlack, playerWhite);
         assertTrue(terminal);
-
     }
 
-
+    /**
+     * Tests {@code backPropagation()} correctly increments wins and visits up the tree.
+     */
     @Test
     public void testBackPropagation() {
         //1.fake the parent child situation
@@ -332,9 +296,7 @@ public class MCTSStrategyTest {
         assertEquals(generation5.getVisits(), 0);
         assertEquals(generation5.getWins(), 0);
 
-
         mctsStrategy.backPropagation(true, generation5);//so before is all 0 👆, and after is all 1
-
 
         assertEquals(generation0.getVisits(), 1);
         assertEquals(generation0.getWins(), 1);
@@ -344,9 +306,5 @@ public class MCTSStrategyTest {
 
         assertEquals(generation5.getVisits(), 1);
         assertEquals(generation5.getWins(), 1);
-
-
-
     }
-
 }

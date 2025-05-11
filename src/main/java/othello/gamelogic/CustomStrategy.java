@@ -5,23 +5,43 @@ import java.util.Map;
 
 import static othello.gamelogic.OthelloGame.GAME_BOARD_SIZE;
 
+
+/**
+ * A custom strategy for the Othello game implementing the Strategy interface.
+ * This strategy uses a depth-limited Minimax algorithm with alpha-beta pruning to select the best move.
+ */
 public class CustomStrategy implements Strategy {
     private int MAX_DEPTH = 2;
     private int nodesEvaluated = 0;  // Counter for node evaluations
+    private int testing = 0;
 
 
 
-    
-    // Getter for nodes evaluated
+
+    /**
+     * Gets the number of nodes evaluated during the most recent move computation.
+     *
+     * @return the number of evaluated nodes
+     */
     public int getNodesEvaluated() {
         return nodesEvaluated;
     }
-    
-    // Reset counter
+
+    /**
+     * Resets the counter tracking the number of evaluated nodes.
+     */
     public void resetNodesEvaluated() {
         nodesEvaluated = 0;
     }
-    
+
+    /**
+     * Selects the best move for the given player using the Minimax algorithm with alpha-beta pruning.
+     *
+     * @param board    the current board state
+     * @param player   the current player
+     * @param opponent the opposing player
+     * @return the selected move as a {@code BoardSpace}
+     */
     @Override
     public BoardSpace selectMove(BoardSpace[][] board, Player player, Player opponent) {
         resetNodesEvaluated();  // Reset counter before each move
@@ -31,8 +51,6 @@ public class CustomStrategy implements Strategy {
         int beta = Integer.MAX_VALUE;
         Map<BoardSpace, List<BoardSpace>> availableMoves = player.getAvailableMoves(board);
         for (BoardSpace futureMoves : availableMoves.keySet()) {
-//            System.out.println("Trying move: " + futureMoves);
-//            System.out.println("Flipping origins: " + player.getAvailableMoves(board).get(futureMoves));
             List<BoardSpace> origins = availableMoves.get(futureMoves);
 
             if (origins == null || origins.isEmpty()) {
@@ -42,12 +60,6 @@ public class CustomStrategy implements Strategy {
 
             BoardSpace[][] copiedBoard = copyBoard(board);
             simulate(copiedBoard, futureMoves, origins, player);
-//            for (BoardSpace[] boardSpaces : copiedBoard) {
-//                for (BoardSpace boardSpace : boardSpaces) {
-//                    System.out.println(boardSpace + " ");
-//                }
-//                System.out.println();
-//            }
 
             int score = minmaximizer(copiedBoard, player, opponent, MAX_DEPTH, false, alpha, beta);
             if (score > maxScore) {
@@ -62,18 +74,22 @@ public class CustomStrategy implements Strategy {
         return move;
     }
 
-    // Returns score
+    /**
+     * Recursive implementation of Minimax algorithm with alpha-beta pruning.
+     *
+     * @param board      the current board state
+     * @param player     the maximizing player
+     * @param opponent   the minimizing opponent
+     * @param depth      the remaining search depth
+     * @param maximizing whether the current layer is maximizing
+     * @param alpha      current alpha value
+     * @param beta       current beta value
+     * @return the evaluated score
+     */
     int minmaximizer(BoardSpace[][] board, Player player, Player opponent, int depth, boolean maximizing, int alpha, int beta) {
-//        System.out.println("I am called! depth : " + depth);
         nodesEvaluated++;  // to check the efficiency
-        
+
         if (depth == 0) { //so this is the base case
-//debug            for (BoardSpace[] boardSpaces : board) {
-//                for (BoardSpace boardSpace : boardSpaces) {
-//                    System.out.print(boardSpace + " ");
-//                }
-//                System.out.println();
-//            }
             return scoreBoard(board, player, Constants.BOARD_WEIGHTS);
         }
 
@@ -81,8 +97,6 @@ public class CustomStrategy implements Strategy {
             int maxScore = Integer.MIN_VALUE;
             Map<BoardSpace, List<BoardSpace>> availableMoves = player.getAvailableMoves(board);
             for (BoardSpace move : availableMoves.keySet()) {
-//                System.out.println("Available moves for player1a: " + player.getAvailableMoves(board).keySet());
-
                 BoardSpace[][] copiedBoard = copyBoard(board);
                 simulate(copiedBoard, move, availableMoves.get(move), player);
                 int score = minmaximizer(copiedBoard, player, opponent, depth-1, false, alpha, beta);
@@ -100,8 +114,6 @@ public class CustomStrategy implements Strategy {
             int minScore = Integer.MAX_VALUE;
             Map<BoardSpace, List<BoardSpace>> availableMoves = opponent.getAvailableMoves(board);
             for (BoardSpace move : availableMoves.keySet()) {
-//                System.out.println("Available moves for player2: " + player.getAvailableMoves(board).keySet());
-                //simulate move
                 BoardSpace[][] copiedBoard = copyBoard(board); //deep copy
                 simulate(copiedBoard, move, availableMoves.get(move), opponent); //change copied board
                 int score = minmaximizer(copiedBoard, player, opponent, depth-1, true, alpha, beta);
@@ -116,10 +128,17 @@ public class CustomStrategy implements Strategy {
         }
     }
 
-    private void simulate(BoardSpace[][] board, BoardSpace dest, List<BoardSpace> origins, Player player) {//change copied board
-        //create a temporary game and call take spaces function, and change the copied board
+    /**
+     * Simulates a move by flipping all affected pieces between origins and destination on the board.
+     *
+     * @param board   the board to modify
+     * @param dest    the destination of the move
+     * @param origins the list of origin pieces to flip from
+     * @param player  the current player making the move
+     */
 
-        // check x and y are valid inputs
+    private void simulate(BoardSpace[][] board, BoardSpace dest, List<BoardSpace> origins, Player player) {//change copied board
+
         if (dest.getX() < 0 || dest.getX() >= GAME_BOARD_SIZE || dest.getY() < 0 || dest.getY() >= GAME_BOARD_SIZE) {
             return;
         }
@@ -128,7 +147,6 @@ public class CustomStrategy implements Strategy {
 
         if(origins == null) return;
 
-        // For every origin space in List, flip all pieces between origin and destination
         for (BoardSpace origin : origins) {
             int dx = Integer.compare(dest.getX() - origin.getX(), 0);
             int dy = Integer.compare(dest.getY() - origin.getY(), 0);
@@ -149,7 +167,12 @@ public class CustomStrategy implements Strategy {
         }
     }
 
-    // Copy board for simulation
+    /**
+     * Creates a deep copy of the provided board.
+     *
+     * @param board the original board to copy
+     * @return a new board array with copied {@code BoardSpace} objects
+     */
     private BoardSpace[][] copyBoard(BoardSpace[][] board) {
         BoardSpace[][] newBoard = new BoardSpace[board.length][board[0].length];
         for (int row = 0; row < board.length; row ++) {
@@ -160,16 +183,22 @@ public class CustomStrategy implements Strategy {
         return newBoard;
     }
 
-    // Get the total score of the board for current player
+    /**
+     * Evaluates the board by calculating the weighted score for the specified player.
+     * Opponent scores are subtracted from the player's score.
+     *
+     * @param board         the board to evaluate
+     * @param player        the player whose score is being computed
+     * @param boardWeights  the weights assigned to each position on the board
+     * @return the computed score
+     */
     private int scoreBoard(BoardSpace[][] board, Player player, int[][] boardWeights) {
         int score = 0;
         for (int row = 0; row < board.length; row++) {
             for (int col =0; col < board[0].length; col++) {
                 if (board[row][col].getType() == player.getColor()) {
-//                    System.out.println("Add score: " + boardWeights[row][col]);
                     score += boardWeights[row][col];
                 } else if (board[row][col].getType() != BoardSpace.SpaceType.EMPTY) {
-//                    System.out.println("Minus score: " + boardWeights[row][col]);
                     score -= boardWeights[row][col];
                 }
             }

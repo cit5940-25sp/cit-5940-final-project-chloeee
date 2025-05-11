@@ -10,10 +10,11 @@ public class ComputerPlayer extends Player{
      */
     private Strategy strategy;
     /**
-     * Constructs a ComputerPlayer with a specified strategy name.
-     * The strategy name determines which AI strategy the player will use.
+     * Constructs a {@code ComputerPlayer} with a specified strategy name.
+     * The strategy name determines which AI strategy this player will use.
      *
-     * @param strategyName the name of the strategy ("minimax", "expectimax", "mcts", or others for custom)
+     * @param strategyName the name of the strategy to use; should be one of
+     *                     "minimax", "expectimax", "mcts", or another valid custom strategy.
      */
     public ComputerPlayer(String strategyName) {
         // PART 2
@@ -21,8 +22,6 @@ public class ComputerPlayer extends Player{
         // This input should match the ones specified in App.java!
         if (strategyName.equals("minimax")){
             this.strategy = new MinimaxStrategy();
-        } else if (strategyName.equals("expectimax")){
-            this.strategy = new ExpectimaxStrategy();
         } else if (strategyName.equals("mcts")){
             this.strategy = new MCTSStrategy();
         } else {
@@ -30,9 +29,14 @@ public class ComputerPlayer extends Player{
         }
     }
 
-    // PART 2
-    // TODO: implement a method that returns a BoardSpace that a strategy selects
-    // We already have the strategies implemented, so simply call it
+    /**
+     * Selects a move using the associated strategy.
+     *
+     * @param board the current game board.
+     * @param player the computer player making the move.
+     * @param opponent the opposing player.
+     * @return the {@code BoardSpace} chosen as the next move.
+     */
     public BoardSpace chooseMove(BoardSpace[][] board, Player player, Player opponent) {
         return strategy.selectMove(board, player, opponent);
     }
