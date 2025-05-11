@@ -182,8 +182,15 @@ public class OthelloGame {
                 y += dy;
             }
         }
+        this.currentPlayer = opponent;
     }
 
+    /**
+     * Switches the player.
+     */
+    public void switchPlayer() {
+        this.currentPlayer = (currentPlayer == playerOne) ? playerTwo : playerOne;
+    }
     /**
      * Gets the computer decision for its turn.
      * Should call a method within the ComputerPlayer class that returns a BoardSpace using a specific strategy.

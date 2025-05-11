@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.junit.runner.Computer;
 import othello.gamelogic.*;
 import java.util.List;
 import java.util.Map;
@@ -104,16 +105,27 @@ public class GameController  {
         }
         applyTheme();
         updateScoreBoard();
-
         animateButtonPress(themeToggleBtn);
+
         // If it's a human player's turn, re-show available moves with new theme colors
         Player currentPlayer = og.getCurrentPlayer(); // You'll need to add getCurrentPlayer() to OthelloGame
+        turnText(currentPlayer);
+
         // If it's a human player's turn, re-show available moves
         if (currentPlayer instanceof HumanPlayer) {
+            computerTurnBtn.setVisible(false);
+            computerTurnBtn.setOnAction(null);
+            computerTurnBtn.setOnAction(e -> {
+                computerDecision((ComputerPlayer) currentPlayer);
+            });
+            showMoves((HumanPlayer) currentPlayer);
+        } else {
+            computerTurnBtn.setVisible(true);
             showMoves((HumanPlayer) currentPlayer);
         }
     }
 
+    /**
     /**
      * Updates the visual score bars representing each player's score.
      */
