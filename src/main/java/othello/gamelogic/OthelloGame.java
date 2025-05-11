@@ -8,7 +8,6 @@ import java.util.*;
  */
 public class OthelloGame {
     public static final int GAME_BOARD_SIZE = 8;
-
     private BoardSpace[][] board;
     private final Player playerOne;
     private final Player playerTwo;
@@ -184,6 +183,7 @@ public class OthelloGame {
             }
         }
     }
+
     /**
      * Gets the computer decision for its turn.
      * Should call a method within the ComputerPlayer class that returns a BoardSpace using a specific strategy.

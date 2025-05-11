@@ -115,5 +115,4 @@ public class BoardSpace {
                 ", type=" + type +
                 '}';
     }
-
 }

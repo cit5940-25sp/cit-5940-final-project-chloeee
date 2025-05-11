@@ -39,33 +39,34 @@ public class MCTSNode {
         this.visits = 0;
         this.children = new ArrayList<>();
     }
+
     /**
      * Adds a child node to this node.
      *
      * @param child the child node to add
      */
-
     public void addChild(MCTSNode child) {
         children.add(child);
     }
+
     /**
      * Returns the list of child nodes.
      *
      * @return a list of children of this node
      */
-
     public List<MCTSNode> getChildren() {
         return children;
     }
+
     /**
      * Returns the number of wins at this node.
      *
      * @return number of wins
      */
-
     public int getWins() {
         return wins;
     }
+
     /**
      * Returns the number of times this node has been visited.
      *
@@ -74,19 +75,21 @@ public class MCTSNode {
     public int getVisits() {
         return visits;
     }
+
     /**
      * Increments the number of wins by 1.
      */
-
     public void incrementWins() {
         wins++;
     }
+
     /**
      * Increments the number of visits by 1.
      */
     public void incrementVisits() {
         visits++;
     }
+
     /**
      * Returns the board state at this node.
      *
@@ -95,6 +98,7 @@ public class MCTSNode {
     public BoardSpace[][] getBoard() {
         return board;
     }
+
     /**
      * Returns the parent of this node.
      *
@@ -103,6 +107,7 @@ public class MCTSNode {
     public MCTSNode getParent() {
         return parent;
     }
+
     /**
      * Returns the move that led to this node from its parent.
      *

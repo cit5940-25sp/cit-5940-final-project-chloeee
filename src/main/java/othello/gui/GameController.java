@@ -3,7 +3,6 @@ package othello.gui;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -13,12 +12,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import othello.gamelogic.*;
-
-import java.awt.*;
 import java.util.List;
 import java.util.Map;
-
-import static java.lang.Long.toHexString;
 
 /**
  * Manages the interaction between model and view of the game.
@@ -37,15 +32,11 @@ public class GameController  {
     @FXML private Rectangle whiteScoreBackground;
     @FXML private Pane rightPanel;
 
-    // @FXML private Label scoreLabel;
-
     // Private variables
     private OthelloGame og;
     private int skippedTurns;
     private GUISpace[][] guiBoard;
     private Theme currentTheme; // adding the Theme
-
-
 
     @FXML
     public void initialize() {
@@ -201,7 +192,6 @@ public class GameController  {
                 color.getOpacity());
     }
 
-
     /**
      * Displays the board initially, adding the GUI squares into the window.
      * Also adds the initial state of the board with black and white taking spaces at the center.
@@ -282,10 +272,11 @@ public class GameController  {
         turnLabel.setTextFill(currentTheme.getTextColor());
     }
 
-    /*
-    Add animation feature
+    /**
+     * Applies a quick visual animation to a button to simulate a press effect.
+     *
+     * @param button the button to animate
      */
-
     private void animateButtonPress(Button button) {
         String originalStyle = button.getStyle();
         Color animationColor = currentTheme.getButtonPressAnimationColor();
@@ -305,37 +296,11 @@ public class GameController  {
         timeline.play();
     }
 
-    private void animateDiscFlip(int x, int y, BoardSpace.SpaceType newType) {
-        GUISpace space = guiBoard[x][y];
-        Circle animationDisc = new Circle();
-
-        int squareCenter = GUISpace.SQUARE_SIZE / 2;
-        animationDisc.setRadius(squareCenter - 5);
-        animationDisc.setFill(newType.fill());
-        animationDisc.setStroke(Color.BLACK);
-        animationDisc.setCenterX(squareCenter);
-        animationDisc.setCenterY(squareCenter);
-
-        animationDisc.setScaleX(0);
-        animationDisc.setScaleY(0);
-
-        space.getSquare().getChildren().add(animationDisc);
-
-        ScaleTransition st = new ScaleTransition(Duration.millis(300), animationDisc);
-        st.setFromX(0);
-        st.setFromY(0);
-        st.setToX(1);
-        st.setToY(1);
-        st.setOnFinished(e -> {
-            space.getSquare().getChildren().remove(animationDisc);
-            space.addOrUpdateDisc(newType);
-        });
-        st.play();
-    }
-
-
     /**
-     * Displays the score of the board.
+     * Updates the turn label to indicate that the specified player had to skip their turn
+     * due to having no available moves. Also displays the current score for both players.
+     *
+     * @param player the player who has no valid moves and must skip their turn
      */
     @FXML
     protected void skipTurnText(Player player) {
@@ -346,8 +311,11 @@ public class GameController  {
     }
 
     /**
-     * Either shows moves for humans or makes a decision for a computer.
-     * @param player player to take a turn for, whether its human or computer
+     * Initiates a turn for the specified player.
+     * For human players, highlights valid move locations.
+     * For computer players, enables a button to make the automated move.
+     *
+     * @param player the player whose turn it is (can be human or computer)
      */
     @FXML
     protected void takeTurn(Player player) {
@@ -425,7 +393,6 @@ public class GameController  {
             skippedTurns = 0;
 //            BoardSpace selectedDestination = og.computerDecision(player);
             BoardSpace selectedDestination = player.chooseMove(og.getBoard(), player, otherPlayer(player));
-
 
             // From all origins, path to the destination and take spaces
             og.takeSpaces(player, otherPlayer(player), availableMoves, selectedDestination);

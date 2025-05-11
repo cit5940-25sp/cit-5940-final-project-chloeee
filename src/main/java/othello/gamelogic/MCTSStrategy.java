@@ -11,10 +11,7 @@ import othello.Constants;
 public class MCTSStrategy implements Strategy{
 //    private static final double EXPLORATION_PARAM = Math.sqrt(2);
     private static final double NUM_ITERATION = 100;
-
-
     private static final Random rand = new Random();
-
 
     /**
      * Selects the next move using Monte Carlo Tree Search (MCTS).
@@ -203,7 +200,6 @@ public class MCTSStrategy implements Strategy{
 
             }
         }
-
 //👇🏻 used for debugging
 //        System.out.println("player score: " + playerScore);
 //        System.out.println("opponentScore score: " + opponentScore);

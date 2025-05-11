@@ -2,9 +2,7 @@ package othello.gamelogic;
 import othello.Constants;
 import java.util.List;
 import java.util.Map;
-
 import static othello.gamelogic.OthelloGame.GAME_BOARD_SIZE;
-
 
 /**
  * A custom strategy for the Othello game implementing the Strategy interface.
@@ -14,9 +12,6 @@ public class CustomStrategy implements Strategy {
     private int MAX_DEPTH = 2;
     private int nodesEvaluated = 0;  // Counter for node evaluations
     private int testing = 0;
-
-
-
 
     /**
      * Gets the number of nodes evaluated during the most recent move computation.
@@ -136,7 +131,6 @@ public class CustomStrategy implements Strategy {
      * @param origins the list of origin pieces to flip from
      * @param player  the current player making the move
      */
-
     private void simulate(BoardSpace[][] board, BoardSpace dest, List<BoardSpace> origins, Player player) {//change copied board
 
         if (dest.getX() < 0 || dest.getX() >= GAME_BOARD_SIZE || dest.getY() < 0 || dest.getY() >= GAME_BOARD_SIZE) {
@@ -153,8 +147,6 @@ public class CustomStrategy implements Strategy {
 
             int x = origin.getX() + dx;
             int y = origin.getY() + dy;
-
-
 
             while (x != dest.getX() || y != dest.getY()) {//we could do this only because they are on the same line: vertically, horizontally, or diagonally
                 if (x < 0 || x >= GAME_BOARD_SIZE || y < 0 || y >= GAME_BOARD_SIZE) {

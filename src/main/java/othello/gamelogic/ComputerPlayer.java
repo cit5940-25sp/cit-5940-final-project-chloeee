@@ -40,5 +40,4 @@ public class ComputerPlayer extends Player{
     public BoardSpace chooseMove(BoardSpace[][] board, Player player, Player opponent) {
         return strategy.selectMove(board, player, opponent);
     }
-
 }

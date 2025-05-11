@@ -84,7 +84,6 @@ public abstract class Player {
         return availableMoves;
     }
 
-
     /**
      * Helper method that checks a specific direction from an empty board cell to determine
      * if there exists a valid move path starting from an opponent's piece and ending on one of the player's pieces.
