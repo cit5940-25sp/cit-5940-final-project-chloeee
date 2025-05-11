@@ -1,28 +1,42 @@
 package othello.gamelogic;
-
 import othello.Constants;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implements a Minimax strategy for Othello game AI.
+ * Evaluates future board states recursively up to a certain depth and selects the optimal move.
+ */
 public class MinimaxStrategy implements Strategy {
     private int MAX_DEPTH = 2;
     private int nodesEvaluated = 0;  // Counter for node evaluations
-    
-    // Getter for nodes evaluated
+
+    /**
+     * Returns the number of nodes evaluated in the last Minimax run.
+     *
+     * @return Number of nodes evaluated.
+     */
     public int getNodesEvaluated() {
         return nodesEvaluated;
     }
-    
+
+    /**
+     * Resets the internal counter for the number of nodes evaluated.
+     */
     // Reset counter
     public void resetNodesEvaluated() {
         nodesEvaluated = 0;
     }
 
-    // TO DO
+    /**
+     * Selects the best move for the current player using the Minimax algorithm.
+     *
+     * @param board    The current game board.
+     * @param player   The player making the move.
+     * @param opponent The opposing player.
+     * @return The optimal {@link BoardSpace} to play.
+     */
     @Override
-    // Calls the recursive function
     public BoardSpace selectMove(BoardSpace[][] board, Player player, Player opponent) {
         resetNodesEvaluated();  // Reset counter before each move
         //get potential move
@@ -42,7 +56,16 @@ public class MinimaxStrategy implements Strategy {
         return move;
     }
 
-    // Returns score
+    /**
+     * Recursive Minimax evaluation function.
+     *
+     * @param board      Current board state.
+     * @param player     The AI player.
+     * @param opponent   The opposing player.
+     * @param depth      Current depth of recursion.
+     * @param maximizing True if this node is a maximizing node, false if minimizing.
+     * @return The evaluated score of the board.
+     */
     private int minmaximizer(BoardSpace[][] board, Player player, Player opponent, int depth, boolean maximizing) {
         nodesEvaluated++;  // Increment counter for each node evaluated (check efficiency)
         
@@ -80,6 +103,14 @@ public class MinimaxStrategy implements Strategy {
         }
     }
 
+    /**
+     * Simulates placing a piece on the board and flipping the opponent's pieces accordingly.
+     *
+     * @param board   The board on which to simulate.
+     * @param player  The player making the move.
+     * @param dest    The destination {@link BoardSpace} where the piece is placed.
+     * @param origins The list of origin {@link BoardSpace}s indicating directions to flip.
+     */
     private void simulate(BoardSpace[][] board, Player player, BoardSpace dest, List<BoardSpace> origins) {
         // Change the destination color
         board[dest.getX()][dest.getY()].setType(player.getColor());
@@ -104,7 +135,12 @@ public class MinimaxStrategy implements Strategy {
         }
     }
 
-    // Copy board for simulation
+    /**
+     * Creates a deep copy of the current board state.
+     *
+     * @param board The board to copy.
+     * @return A new deep-copied board.
+     */
     private BoardSpace[][] copyBoard(BoardSpace[][] board) {
         BoardSpace[][] newBoard = new BoardSpace[board.length][board[0].length];
         for (int row = 0; row < board.length; row ++) {
@@ -115,7 +151,13 @@ public class MinimaxStrategy implements Strategy {
         return newBoard;
     }
 
-    // Get the total score of the board for current player
+    /**
+     * Scores the board from the perspective of the given player using static positional weights.
+     *
+     * @param board  The current board state.
+     * @param player The player whose perspective is used for scoring.
+     * @return The board score (positive is good for player, negative is bad).
+     */
     private int scoreBoard(BoardSpace[][] board, Player player) {
         int score = 0;
         for (int row = 0; row < board.length; row++) {
@@ -129,7 +171,4 @@ public class MinimaxStrategy implements Strategy {
         }
         return score;
     }
-
-
-
 }
